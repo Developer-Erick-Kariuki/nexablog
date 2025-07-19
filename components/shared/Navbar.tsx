@@ -8,6 +8,7 @@ import Notifications from "../Notifications";
 import UserButton from "../UserButton";
 
 const Navbar = () => {
+  const session: boolean = true;
   return (
     <header className="border-b">
       <Container>
@@ -25,6 +26,14 @@ const Navbar = () => {
             <ToggleTheme />
             <Notifications />
             <UserButton />
+            {session ? (
+              <h2>User</h2>
+            ) : (
+              <>
+                <Link href="/login">Signin</Link>
+                <Link href="/register">Register</Link>
+              </>
+            )}
           </ul>
         </nav>
       </Container>
