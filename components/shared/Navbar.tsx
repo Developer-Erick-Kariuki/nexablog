@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import Container from "../common/Container";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,9 +8,23 @@ import ToggleTheme from "../common/ToggleTheme";
 import SearchInput from "../SearchInput";
 import Notifications from "../Notifications";
 import UserButton from "../UserButton";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-  const session: boolean = true;
+  const session = useSession();
+
+  const isLoggedIn = session.status === "authenticated";
+  const path = usePathname();
+
+  useEffect(() => {
+    if (!isLoggedIn && path) {
+      const updateSession = async () => {
+        await session.update();
+      };
+      updateSession();
+    }
+  }, [path, isLoggedIn]);
   return (
     <header className="border-b">
       <Container>
@@ -24,12 +40,12 @@ const Navbar = () => {
           <SearchInput />
           <ul className="flex justify-between gap-6">
             <ToggleTheme />
-            <Notifications />
-            <UserButton />
-            {session ? (
-              <h2>User</h2>
-            ) : (
+
+            {isLoggedIn && <Notifications />}
+            {isLoggedIn && <UserButton />}
+            {!isLoggedIn && (
               <>
+                {" "}
                 <Link href="/login">Signin</Link>
                 <Link href="/register">Register</Link>
               </>

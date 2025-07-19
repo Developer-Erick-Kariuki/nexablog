@@ -12,7 +12,7 @@ export type LoginSchemaType = z.infer<typeof LoginSchema>;
 // Register schema
 export const RegisterSchema = z
   .object({
-    username: z
+    name: z
       .string()
       .min(4, { message: "username must be 4 or more characters long" })
       .max(30, "username should not be more than 30 characters long"),
