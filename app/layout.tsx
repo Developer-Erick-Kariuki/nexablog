@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import Navbar from "@/components/shared/Navbar";
-import Footer from "@/components/shared/Footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const IBMplex = Inter({
   variable: "--ibm-plex-sans",
@@ -29,7 +28,9 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${IBMplex.className} antialiased`}>
         <ThemeProvider attribute="class">
-          <SessionProvider session={session}>{children}</SessionProvider>
+          <SessionProvider session={session}>
+            <EdgeStoreProvider>{children}</EdgeStoreProvider>
+          </SessionProvider>
         </ThemeProvider>
         <Toaster position="top-center" richColors visibleToasts={1} />
       </body>

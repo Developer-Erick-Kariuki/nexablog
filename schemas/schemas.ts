@@ -48,3 +48,17 @@ export const PasswordResetSchema = z
   });
 
 export type PasswordResetSchemaTyes = z.infer<typeof PasswordResetSchema>;
+
+export const BlogSchema = z.object({
+  userId: z.string(),
+  title: z
+    .string()
+    .min(10, { message: "title shoud be 10 or more characters long" })
+    .max(150, { message: "title should not be more than 150 characters" }),
+  content: z.string().min(10, { message: "content too short" }),
+  coverImage: z.string().optional(),
+  isPublished: z.boolean(),
+  tags: z.array(z.string()),
+});
+
+export type BlogSchemaType = z.infer<typeof BlogSchema>;
