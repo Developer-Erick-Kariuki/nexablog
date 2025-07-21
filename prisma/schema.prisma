@@ -17,6 +17,7 @@ model User {
   emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
+  role UserRole @default(USER)
   
  
   @@map("users")
@@ -40,4 +41,29 @@ model Account {
  
   @@unique([provider, providerAccountId])
   @@map("accounts")
+}
+
+model EmailVerification{
+  id String @id @default(cuid())
+  email String
+  token String @unique
+  expiresIn DateTime
+
+  @@unique([email, token])
+
+}
+
+model PasswordResetToken{
+  id String @id @default(cuid())
+  email String
+  token String @unique
+  expiresIn DateTime
+
+  @@unique([email, token])
+
+}
+
+enum UserRole{
+  ADMIN
+  USER
 }

@@ -1,6 +1,10 @@
 "use server";
 
 import { signIn } from "@/auth";
+import {
+  generateEmailVerificationToken,
+  sendVerificationToken,
+} from "@/lib/emailVerification";
 import { getUserEmail } from "@/lib/user";
 import { LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema, LoginSchemaType } from "@/schemas/schemas";
@@ -18,19 +22,37 @@ export const login = async (values: LoginSchemaType) => {
   const user = (await getUserEmail(email)) as {
     emailVerified?: boolean;
     password?: string;
+    email: string;
   };
 
   if (!user) {
-    return { error: "Email already exists" };
+    return { error: "Email does not exist" };
   }
 
   if (!email || !password || !user.password) {
     return { error: "Ivalid credetials" };
   }
 
-  //   if (!user.emailVerified) {
-  //     return { error: "Email not verified" };
-  //   }
+  if (!user.emailVerified) {
+    const emailVerificationToken = await generateEmailVerificationToken(
+      user.email
+    );
+
+    const { error } = await sendVerificationToken(
+      emailVerificationToken?.token
+    );
+
+    if (error) {
+      return {
+        error:
+          "an error occured while trying to send a verification token tru again ",
+      };
+    }
+
+    return {
+      success: "Verification email sent. Please verify your email to continue",
+    };
+  }
 
   try {
     await signIn("credentials", {

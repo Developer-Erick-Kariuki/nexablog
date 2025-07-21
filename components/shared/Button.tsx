@@ -10,7 +10,7 @@ interface ButtonProps {
   icon?: IconType;
   className?: string;
   type?: "submit" | "reset" | "button" | undefined;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function Button({

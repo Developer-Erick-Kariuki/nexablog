@@ -10,25 +10,21 @@ import Button from "../Button";
 import Heading from "@/components/common/Heading";
 import SocialAuth from "./SocialAuth";
 import { signup } from "@/actions/auth/register";
-import Alert from "../Alert";
+import { toast } from "sonner";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
 
   const { register, handleSubmit, formState } = useForm<RegisterSchemaTypes>({
     resolver: zodResolver(RegisterSchema),
   });
 
   const onSubmit: SubmitHandler<RegisterSchemaTypes> = (data) => {
-    setError("");
-    setSuccess("");
-
     startTransition(() => {
       signup(data).then((res) => {
-        setError(res.error);
-        setSuccess(res.success);
+        toast.error(res.error);
+        toast.success(res.success);
       });
     });
   };
@@ -71,8 +67,7 @@ export default function RegisterForm() {
         type="password"
         disabled={isPending}
       />
-      {error && <Alert message={error} error />}
-      {success && <Alert message={success} success />}
+
       <Button
         disabled={isPending}
         type="submit"
@@ -81,6 +76,12 @@ export default function RegisterForm() {
       />
       <div className="flex justify-center my-2">Or</div>
       <SocialAuth />
+      <h2>
+        Already have an account{" "}
+        <span className="text-purple-500">
+          <Link href="/login">SignIn</Link>
+        </span>
+      </h2>
     </form>
   );
 }

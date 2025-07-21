@@ -28,3 +28,23 @@ export const RegisterSchema = z
   });
 
 export type RegisterSchemaTypes = z.infer<typeof RegisterSchema>;
+
+export const PasswordSchema = z.object({
+  email: z.email(),
+});
+
+export type PasswordSchemaTyes = z.infer<typeof PasswordSchema>;
+
+export const PasswordResetSchema = z
+  .object({
+    password: z
+      .string()
+      .min(6, { message: "password must be 6 characters or more" }),
+    confirmPassword: z.string(),
+  })
+  .refine((values) => values.password === values.confirmPassword, {
+    message: "Password must match!",
+    path: ["confirmPassword"],
+  });
+
+export type PasswordResetSchemaTyes = z.infer<typeof PasswordResetSchema>;

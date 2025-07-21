@@ -5,6 +5,10 @@ import bcrypt from "bcryptjs";
 import { RegisterSchema, RegisterSchemaTypes } from "@/schemas/schemas";
 import { prisma } from "@/lib/db";
 import { getUserEmail } from "@/lib/user";
+import {
+  generateEmailVerificationToken,
+  sendVerificationToken,
+} from "@/lib/emailVerification";
 
 export const signup = async (values: RegisterSchemaTypes) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -32,5 +36,19 @@ export const signup = async (values: RegisterSchemaTypes) => {
       password: hashedPassword,
     },
   });
-  return { success: "User created successfully" };
+
+  const emailVerificationToken = await generateEmailVerificationToken(email);
+
+  const { error } = await sendVerificationToken(emailVerificationToken?.token);
+
+  if (error) {
+    return {
+      error:
+        "an error occured while trying to send a verification token tru again ",
+    };
+  }
+
+  return {
+    success: "Verification link sent to your email",
+  };
 };

@@ -11,14 +11,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { LogOut, Pencil, Shield, User, UserRound } from "lucide-react";
 import { FaBookmark } from "react-icons/fa";
 
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function UserButton() {
+  const session = useSession();
+
+  const imageURL = session.data?.user.image || "";
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="border-2 rounded-full border-slate-800 dark:border-slate-300">
         <Avatar>
-          <AvatarImage src="" />
+          <AvatarImage src={imageURL} />
           <AvatarFallback>
             <UserRound />
           </AvatarFallback>

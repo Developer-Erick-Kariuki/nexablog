@@ -2,7 +2,7 @@
 
 import { LoginSchema, LoginSchemaType } from "@/schemas/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState, useTransition } from "react";
+import React, { useTransition } from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import Formfield from "../Formfield";
@@ -11,16 +11,15 @@ import Heading from "@/components/common/Heading";
 import SocialAuth from "./SocialAuth";
 import Link from "next/link";
 import { login } from "@/actions/auth/login";
-import Alert from "../Alert";
+
 import { useRouter } from "next/navigation";
 import { LOGIN_REDIRECT } from "@/routes";
+import { toast } from "sonner";
 
 export default function LoginForm() {
   const router = useRouter();
 
   const [isPending, statTransition] = useTransition();
-
-  const [error, setError] = useState<string | undefined>("");
 
   const { register, handleSubmit, formState } = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
@@ -30,7 +29,11 @@ export default function LoginForm() {
     statTransition(() => {
       login(data).then((res) => {
         if (res?.error) {
-          setError(res.error);
+          toast.error(res.error);
+        }
+
+        if (res?.success) {
+          toast.success(res.success);
         }
 
         if (!res?.error) {
@@ -43,7 +46,7 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 w-full max-w-[500px] m-auto"
+      className="flex flex-col  gap-4 w-full max-w-[500px] m-auto"
     >
       <Heading title="Welcome to Nexablog" lg center />
       <Formfield
@@ -62,7 +65,6 @@ export default function LoginForm() {
         type="password"
         disabled={isPending}
       />
-      {error && <Alert message={error} error />}
 
       <Button
         type="submit"
@@ -70,6 +72,12 @@ export default function LoginForm() {
         onClick={() => {}}
         disabled={isPending}
       />
+      <Link
+        className="text-sm mt-2 underline opacity-85"
+        href="/password-email"
+      >
+        Forgot Paaword?
+      </Link>
       <div className="flex justify-center my-2">Or</div>
       <SocialAuth />
       <div className="flex gap-4">

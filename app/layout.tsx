@@ -6,6 +6,7 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/sonner";
 
 const IBMplex = Inter({
   variable: "--ibm-plex-sans",
@@ -30,6 +31,7 @@ export default async function RootLayout({
         <ThemeProvider attribute="class">
           <SessionProvider session={session}>{children}</SessionProvider>
         </ThemeProvider>
+        <Toaster position="top-center" richColors visibleToasts={1} />
       </body>
     </html>
   );
