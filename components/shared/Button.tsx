@@ -26,8 +26,8 @@ export default function Button({
   return (
     <button
       className={cn(
-        "disabled:opacity-70 disabled:cursor-not-allowed rounded-md hover:opacity-80  transition w-auto border-2 flex items-center justify-center gap-2 py-3 px-5",
-        outlined ? "bg-transparent border-2" : "bg-slate-200 dark:bg-slate-700",
+        "disabled:opacity-70 disabled:cursor-not-allowed rounded-md hover:opacity-80 transition w-auto border-2 flex items-center justify-center gap-2 py-3 px-5",
+        outlined && "bg-transparent border-2",
         className
       )}
       type={type}

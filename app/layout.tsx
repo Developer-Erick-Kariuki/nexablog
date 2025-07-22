@@ -27,12 +27,12 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${IBMplex.className} antialiased`}>
-        <ThemeProvider attribute="class">
-          <SessionProvider session={session}>
+        <SessionProvider session={session}>
+          <ThemeProvider attribute="class">
             <EdgeStoreProvider>{children}</EdgeStoreProvider>
-          </SessionProvider>
-        </ThemeProvider>
-        <Toaster position="top-center" richColors visibleToasts={1} />
+          </ThemeProvider>
+          <Toaster position="top-center" richColors visibleToasts={1} />
+        </SessionProvider>
       </body>
     </html>
   );

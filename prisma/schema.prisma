@@ -18,6 +18,7 @@ model User {
   image         String?
   accounts      Account[]
   role UserRole @default(USER)
+  blogs Blog[]
   
  
   @@map("users")
@@ -66,4 +67,17 @@ model PasswordResetToken{
 enum UserRole{
   ADMIN
   USER
+}
+
+model Blog {
+  id String @id @default(cuid())
+  userId String
+  title String
+  content String
+  coverImage String?
+  tags String[]
+  isPublished Boolean @default(false)
+  createAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
 }

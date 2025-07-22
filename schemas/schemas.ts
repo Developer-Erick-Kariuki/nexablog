@@ -58,7 +58,9 @@ export const BlogSchema = z.object({
   content: z.string().min(10, { message: "content too short" }),
   coverImage: z.string().optional(),
   isPublished: z.boolean(),
-  tags: z.array(z.string()),
+  tags: z
+    .array(z.string())
+    .max(4, { message: "You can only select a max of 4 tags" }),
 });
 
 export type BlogSchemaType = z.infer<typeof BlogSchema>;

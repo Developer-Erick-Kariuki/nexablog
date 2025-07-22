@@ -53,7 +53,7 @@ export default function AddCover({
     return () => {
       isMounted = false;
     };
-  }, [file, edgestore, replaceUrl, setUploadedCover]);
+  }, [file]);
 
   return (
     <div>
@@ -65,14 +65,14 @@ export default function AddCover({
         hidden
       />
       <button
-        className="cursor-pointer flex items-center gap-2"
+        className="cursor-pointer bg-transparent underline-offset-2 p-3 rounded-md mt-4 hover:opacity-75 border-2 flex items-center gap-2"
         type="button"
         onClick={handleButtonClick}
       >
         <ImageIcon size={20} />
         <span>{replaceUrl ? "Change Cover" : "Add Cover Image"}</span>
-        {isUploading && <p>Uplaoding ...</p>}
       </button>
+      {isUploading && <p className="text-green-400">Uplaoding ...</p>}
     </div>
   );
 }
